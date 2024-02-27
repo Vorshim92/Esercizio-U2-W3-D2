@@ -60,9 +60,39 @@ const generateName = () => {
     nomeAggiunto.innerText = "Nome Salvato: ";
   }
 };
+// ESERCIZIO 2
+// Crea un contatore che tenga conto del tempo che passa, utilizzando sessionStorage. Aggiornando la pagina il valore prosegue, chiudendo la pagina - ovviamente - ricomincia. Il valore del contatore deve aggiornarsi ad ogni secondo.
+let intervalCounter;
+const sessionStorageKey = "counter";
+const updateContatore = () => {
+  const contatore = document.getElementById("contatore");
+  const counter = sessionStorage.getItem(sessionStorageKey);
+
+  contatore.innerText = counter;
+};
+const sessionContatore = () => {
+  let counter = sessionStorage.getItem(sessionStorageKey);
+  counter++;
+  sessionStorage.setItem(sessionStorageKey, counter);
+  updateContatore();
+};
+
+const stopBtn = document.getElementById("stop-counter");
+const resumeBtn = document.getElementById("resume-counter");
+const stopCounter = () => {
+  clearInterval(intervalCounter);
+  resumeBtn.addEventListener("click", resumeCounter);
+};
+const resumeCounter = () => {
+  intervalCounter = setInterval(sessionContatore, 1000);
+  resumeBtn.removeEventListener("click", resumeCounter);
+};
+
 window.onload = () => {
   form.addEventListener("submit", save);
   removeBtn.addEventListener("click", remove);
-
   generateName();
+
+  intervalCounter = setInterval(sessionContatore, 1000);
+  stopBtn.addEventListener("click", stopCounter);
 };
